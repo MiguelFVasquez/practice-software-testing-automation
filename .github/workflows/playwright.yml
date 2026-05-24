@@ -21,6 +21,10 @@ jobs:
       - name: Run Tests
         run: npx playwright test
 
+      # Instalación de Allure CLI para generar reportes
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline
+
       # 1. Generación de Reporte Allure
       - name: Generar Reporte Allure
         if: always()

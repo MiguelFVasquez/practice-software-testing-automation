@@ -18,8 +18,12 @@ test.describe( 'Catalog and Search engines - Home', () => {
         const productsTitles = homePage.productGrid.locator('.card').locator(homePage.productTitle);
         //4. Validate that at least one of the displayed products contains the searched name
         await expect(productsTitles.first()).toBeVisible();
-        //5. Avanced assertion: Validate that at least one of the displayed products contains the searched name (case-insensitive)
+        // 5. Validación mejorada
         const allTexts = await productsTitles.allTextContents();
+        const found = allTexts.some(text => text.toLowerCase().includes(productName.toLowerCase()));
+
+        // Validamos que al menos un producto en la lista contenga el nombre buscado
+        expect(found, `Ninguno de los productos encontrados contiene: ${productName}`).toBe(true);
         
         allTexts.forEach(text => {
             expect(text.toLowerCase()).toContain(productName.toLowerCase());
