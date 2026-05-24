@@ -2,7 +2,10 @@
   "name": "playwright-e2e-automation-framework",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "allure:generate": "allure generate allure-results -o allure-report --clean"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MiguelFVasquez/practice-software-testing-automation.git"
@@ -17,6 +20,8 @@
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.8.0"
+    "@types/node": "^25.8.0",
+    "allure-commandline": "^2.41.0",
+    "allure-playwright": "^3.9.0"
   }
 }
