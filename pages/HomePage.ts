@@ -16,17 +16,18 @@ export class HomePage {
     }
 
     async buscarProducto(nombre: string): Promise<void> {
+        // 1. Ya no necesitamos el waitFor manual. Playwright lo hará solo.
+        // 2. Si el input está "oculto" por el framework, Playwright esperará automáticamente 
+        // hasta que esté listo para recibir texto.
         await this.searchInput.fill(nombre);
+        
+        // 3. Click
         await this.searchButton.click();
-
-        // CORRECCIÓN: 'networkidle' cuelga indefinidamente en esta SPA porque
-        // mantiene conexiones en background (WebSockets, polling, etc).
-        //
-        // La alternativa correcta para SPAs es esperar a que el elemento
-        // de resultado sea visible en el DOM, que es lo que realmente nos importa.
-        await this.productTitle.first().waitFor({ state: 'visible' });
+        
+        // 4. Esta espera es CRÍTICA porque la búsqueda hace una petición al servidor.
+        // Estamos esperando a que el grid de productos se actualice.
+        await this.productTitle.first().waitFor({ state: 'visible', timeout: 15000 });
     }
-
     async filtrarPorMarca(marca: string): Promise<void> {
         const brandCheckbox = this.page.locator(`input[value="${marca}"]`);
         await brandCheckbox.check();

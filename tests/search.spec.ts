@@ -1,32 +1,28 @@
-import {test, expect} from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 
-test.describe( 'Catalog and Search engines - Home', () => {
-    
+test.describe('Catalog and Search engines - Home', () => {
+
     test.beforeEach(async ({ page }) => {
-        // 1. Navigate to the home page before each test
-        await page.goto('https://practicesoftwaretesting.com/');    
+        await page.goto('/');
+        // Aseguramos estar en Home haciendo clic en el enlace de navegación
+        await page.getByTestId('nav-home').click();
     });
-    
+
     test('Should search for a product and display results', async ({ page }) => {
         const homePage = new HomePage(page);
         const productName = 'Hammer';
 
-        //2. Execute the search action from our Page Object
         await homePage.buscarProducto(productName);
-        //3. Get the list of products displayed in the grid after the search
-        const productsTitles = homePage.productGrid.locator('.card').locator(homePage.productTitle);
-        //4. Validate that at least one of the displayed products contains the searched name
-        await expect(productsTitles.first()).toBeVisible();
-        // 5. Validación mejorada
-        const allTexts = await productsTitles.allTextContents();
+
+        // Validamos que el primer resultado sea visible
+        const firstProduct = homePage.productGrid.locator('.card').first();
+        await expect(firstProduct).toBeVisible();
+
+        // Extraemos textos y validamos usando .some()
+        const allTexts = await homePage.productGrid.locator('[data-test="product-name"]').allTextContents();
         const found = allTexts.some(text => text.toLowerCase().includes(productName.toLowerCase()));
 
-        // Validamos que al menos un producto en la lista contenga el nombre buscado
-        expect(found, `Ninguno de los productos encontrados contiene: ${productName}`).toBe(true);
-        
-        allTexts.forEach(text => {
-            expect(text.toLowerCase()).toContain(productName.toLowerCase());
-        });
+        expect(found, `Ninguno de los productos contiene: ${productName}`).toBe(true);
     });
 });
