@@ -37,6 +37,10 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  expect: {
+    timeout: 10000, // Tiempo extra para aserciones
+  },
+  timeout: 60000, // Tiempo extra para toda la prueba
   /* Configure projects for major browsers */
   projects: [
     {

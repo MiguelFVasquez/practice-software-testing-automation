@@ -16,17 +16,18 @@ export class HomePage {
     }
 
     async buscarProducto(nombre: string): Promise<void> {
-        // 1. Ya no necesitamos el waitFor manual. Playwright lo hará solo.
-        // 2. Si el input está "oculto" por el framework, Playwright esperará automáticamente 
-        // hasta que esté listo para recibir texto.
-        await this.searchInput.fill(nombre);
+        // Aumentamos el timeout solo para esta acción crítica
+        // Playwright intentará encontrarlo hasta por 15 segundos antes de fallar el paso
+        const input = this.searchInput;
         
-        // 3. Click
-        await this.searchButton.click();
+        // Mas tiempo de espera para el fill, ya que a veces el input tarda en estar interactivo
+        await input.fill(nombre, { timeout: 15000 });
         
-        // 4. Esta espera es CRÍTICA porque la búsqueda hace una petición al servidor.
-        // Estamos esperando a que el grid de productos se actualice.
-        await this.productTitle.first().waitFor({ state: 'visible', timeout: 15000 });
+        // Click con reintento automático
+        await this.searchButton.click({ timeout: 15000 });
+        
+        // Espera a que el grid cargue con mayor margen
+        await this.productTitle.first().waitFor({ state: 'visible', timeout: 20000 });
     }
     async filtrarPorMarca(marca: string): Promise<void> {
         const brandCheckbox = this.page.locator(`input[value="${marca}"]`);

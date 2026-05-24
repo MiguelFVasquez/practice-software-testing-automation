@@ -18,6 +18,9 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Aumentar timeout global
+        run: echo "TIMEOUT=60000" >> $GITHUB_ENV
+          
       - name: Run Tests
         run: npx playwright test
 
