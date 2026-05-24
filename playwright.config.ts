@@ -26,6 +26,7 @@ export default defineConfig({
     ['html'], // Reporte de Playwright
     ['allure-playwright', { outputFolder: 'allure-results' }] // Reporte de Allure
   ],
+  
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -33,6 +34,11 @@ export default defineConfig({
     /* Cambiamos el selector por defecto para adaptarlo a nuestra app */
     baseURL: 'https://practicesoftwaretesting.com/',
     testIdAttribute: 'data-test',
+    // Simular un navegador real para evitar bloqueos básicos
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    launchOptions: {
+      args: ['--disable-blink-features=AutomationControlled']
+    },  
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },

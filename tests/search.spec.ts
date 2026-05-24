@@ -10,6 +10,14 @@ test.describe('Catalog and Search engines - Home', () => {
     });
 
     test('Should search for a product and display results', async ({ page }) => {
+
+        // ¡La validación clave!
+        const isBlocked = await page.getByText('Performing security verification').isVisible();
+        if (isBlocked) {
+            console.error('¡BLOQUEADO POR CLOUDFLARE!');
+            // Aquí podrías añadir una espera larga o tomar una captura para investigar
+            await page.screenshot({ path: 'blocked.png' });
+        }
         const homePage = new HomePage(page);
         const productName = 'Hammer';
 
