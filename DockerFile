@@ -1,0 +1,17 @@
+# Usamos la imagen oficial de Playwright con todo lo necesario
+FROM mcr.microsoft.com/playwright:v1.43.0-jammy
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copiamos los archivos de configuración
+COPY package*.json ./
+
+# Instalamos dependencias
+RUN npm install
+
+# Copiamos el resto del código
+COPY . .
+
+# Comando para ejecutar los tests
+CMD ["npx", "playwright", "test"]
